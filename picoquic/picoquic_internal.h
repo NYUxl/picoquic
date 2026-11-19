@@ -594,6 +594,7 @@ typedef struct st_picoquic_quic_t {
     unsigned int test_large_server_flight : 1; /* Use TP to ensure server flight is at least 8K */
     unsigned int is_port_blocking_disabled : 1; /* Do not check client port on incoming connections */
     unsigned int are_path_callbacks_enabled : 1; /* Enable path specific callbacks by default */
+    unsigned int is_path_status_app_managed : 1; /* New connections: only the application sets paths available / backup */
     unsigned int use_predictable_random : 1; /* For logging tests */
     /* Set by add_chunk_node() when it splices a "received_data" node directly into a
      * stream reassembly tree (zero-copy path) instead of copying its content into a
@@ -1321,6 +1322,7 @@ typedef struct st_picoquic_cnx_t {
     unsigned int is_datagram_ready : 1; /* Active polling for datagrams */
     unsigned int is_immediate_ack_required : 1; /* Should send an ACK asap */
     unsigned int is_multipath_enabled : 1; /* Unique path ID extension has been negotiated */
+    unsigned int is_path_status_app_managed : 1; /* No backup path is made available because the available ones had retransmissions */
     unsigned int is_lost_feedback_notification_required : 1; /* CC algorithm requests lost feedback notification */
     unsigned int is_forced_probe_up_required : 1; /* application wants "probe up" if CC requests it */
     unsigned int is_address_discovery_provider : 1; /* send the address discovery extension */

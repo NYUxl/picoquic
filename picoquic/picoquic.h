@@ -1185,6 +1185,15 @@ int picoquic_abandon_path(picoquic_cnx_t* cnx, uint64_t unique_path_id,
 int picoquic_refresh_path_connection_id(picoquic_cnx_t* cnx, uint64_t unique_path_id);
 int picoquic_set_stream_path_affinity(picoquic_cnx_t* cnx, uint64_t stream_id, uint64_t unique_path_id);
 int picoquic_set_path_status(picoquic_cnx_t* cnx, uint64_t unique_path_id, picoquic_path_status_enum status);
+/* Application-managed path status. By default, once the available paths have had
+ * retransmissions (one PTO is enough), picoquic makes the backup path with fewer of
+ * them available, and it stays available. With this option, picoquic leaves the
+ * available / backup status to the application (picoquic_set_path_status) and to the
+ * peer's PATH_AVAILABLE / PATH_BACKUP frames: a backup path is used only when no
+ * available path is validated, as when the last one is demoted. Off by default.
+ * The _default_ variant applies to connections created afterwards (client or server). */
+void picoquic_set_default_path_status_app_managed(picoquic_quic_t* quic, int is_managed);
+void picoquic_set_path_status_app_managed(picoquic_cnx_t* cnx, int is_managed);
 int picoquic_subscribe_new_path_allowed(picoquic_cnx_t* cnx, int* is_already_allowed);
 
 /* Just after a connection context is created, set the if_index for the connection */

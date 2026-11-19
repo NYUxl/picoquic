@@ -419,7 +419,10 @@ int picoquic_verify_path_available(picoquic_cnx_t* cnx, picoquic_path_t** next_p
             }
         }
     }
-    if (best_available_retransmit > 0 && best_backup_retransmit < best_available_retransmit) {
+    /* With application-managed path status, a backup path is promoted only when no
+     * available path is left, not because the available ones had retransmissions. */
+    if (best_available_retransmit > 0 && best_backup_retransmit < best_available_retransmit &&
+        (!cnx->is_path_status_app_managed || nb_available == 0)) {
         cnx->path[backup_index]->path_is_backup = 0;
         *next_path = cnx->path[backup_index];
         nb_available = 1;

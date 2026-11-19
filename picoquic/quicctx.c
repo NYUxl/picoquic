@@ -4079,6 +4079,7 @@ picoquic_cnx_t* picoquic_create_cnx_internal(picoquic_quic_t* quic,
         cnx->callback_ctx = quic->default_callback_ctx;
         cnx->congestion_alg = quic->default_congestion_alg;
         cnx->is_preemptive_repeat_enabled = quic->is_preemptive_repeat_enabled;
+        cnx->is_path_status_app_managed = quic->is_path_status_app_managed;
 
         /* Initialize key rotation interval to default value */
         cnx->crypto_epoch_length_max = quic->crypto_epoch_length_max;
@@ -5303,6 +5304,18 @@ void picoquic_set_preemptive_repeat_per_cnx(picoquic_cnx_t* cnx, int do_repeat)
 {
     PICOQUIC_THREAD_CHECK(cnx->quic);
     cnx->is_preemptive_repeat_enabled = (do_repeat) ? 1 : 0;
+}
+
+void picoquic_set_default_path_status_app_managed(picoquic_quic_t* quic, int is_managed)
+{
+    PICOQUIC_THREAD_CHECK(quic);
+    quic->is_path_status_app_managed = (is_managed) ? 1 : 0;
+}
+
+void picoquic_set_path_status_app_managed(picoquic_cnx_t* cnx, int is_managed)
+{
+    PICOQUIC_THREAD_CHECK(cnx->quic);
+    cnx->is_path_status_app_managed = (is_managed) ? 1 : 0;
 }
 
 void picoquic_set_congestion_algorithm_ex(picoquic_cnx_t* cnx, picoquic_congestion_algorithm_t const* alg, char const* alg_option_string)
